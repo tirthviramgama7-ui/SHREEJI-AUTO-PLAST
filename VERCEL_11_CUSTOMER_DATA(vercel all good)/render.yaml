@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: active-genuine-auto-parts
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    disk:
+      name: agap-persistent-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: MANAGER_ID
+        value: tirth
+      - key: MANAGER_PASSWORD
+        generateValue: true
+      - key: DEV_OTP
+        value: "1"
